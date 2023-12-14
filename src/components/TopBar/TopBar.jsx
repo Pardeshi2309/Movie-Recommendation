@@ -3,7 +3,7 @@ import { AiOutlineStar } from 'react-icons/ai'
 
 const TopBar = () => {
  return (
-    <div className='text-white border flex justify-center item-center gap-4 p-3 overflow-x-auto'>
+    <div className='text-white flex justify-center item-center gap-4 p-3 overflow-x-auto'>
         
             <button className='px-4 py-2 border-[1px] flex justify-center items-center gap-2 rounded-lg'>
                 <AiOutlineStar />

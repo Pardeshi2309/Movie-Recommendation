@@ -2,20 +2,26 @@ import React from 'react'
 import Star from '../Star'
 import { AiOutlineStar } from 'react-icons/ai'
 import { GoTriangleRight } from "react-icons/go";
+import { useParams } from 'react-router-dom';
+import { useGetMovieQuery } from '../../services/Api';
 
 const MovieInformation = () => {
+    const { id } = useParams();
+    console.log(id);
+
+    const {data, isfetching, error} = useGetMovieQuery(id);
     return (
 
         <section className="w-full flex flex-col justify-center items-center max-w-[1700px] lg:flex-row lg:items-start">
             <div className="w-full  flex justify-center items-center lg:w-[50%]">
                 <div className=" w-[50%] my-5 shadow-lg shadow-light-blue rounded-2xl overflow-hidden">
-                    <img src="https://www.movieposters.com/cdn/shop/products/108b520c55e3c9760f77a06110d6a73b_240x360_crop_center.progressive.jpg?v=1573652543" alt="poster" className='w-full' />
+                    <img src={data?.poster_path ? `http://image.tmdb.org/t/p/w500/${data?.poster_path}` : "https://www.fillmurray.com/200/300"} alt="poster" className='w-full' />
                 </div>
             </div>
             <div className="w-full  h-auto flex flex-col justify-start items-center text-white p-5 lg:w-[50%]">
                 <div className="w-[70%]">
                     <div className="text-center w-full">
-                        <h1 className='font-black text-3xl'>Wonka </h1>
+                        <h1 className='font-black text-3xl'>{data?.title}</h1>
                         <p className="text-sm mt-2">Every good thing in this world started with a dream.</p>
                     </div>
                     <div className="mt-3 w-full flex flex-col justify-center items-center lg:justify-between lg:flex-row">
