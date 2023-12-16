@@ -11,13 +11,28 @@ export const TMDBAPI = createApi({
         }),
 
         getMovie: builder.query({
-            query: (id) =>
-              `/movie/${id}?append_to_response=videos,credits&api_key=face82254ca4b4892fe6f0e6ff9a608a`,
-          }),
+            query: ({ genreName, Page }) => {
+
+
+                //get movies by genre
+
+                if (genreName && typeof genreName === 'number') {
+                    return `discover/movie?with_genres=${genreName}&page=${page}&api_key=face82254ca4b4892fe6f0e6ff9a608a`
+                }
+
+                //get popular movies
+                return `movie/popular?page=${page}&api_key=face82254ca4b4892fe6f0e6ff9a608a`;
+            }
+        }),
+
+        getMovieByGenre: builder.query({
+            query: () => `genre/movie/list?api_key=face82254ca4b4892fe6f0e6ff9a608a`
+        }),
     }),
 });
 
 export const {
     useGetMoviesQuery,
     useGetMovieQuery,
+    useGetMovieByGenreQuery,
 } = TMDBAPI;

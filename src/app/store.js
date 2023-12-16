@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TMDBAPI } from '../services/Api';
+import genreReducer from '../Feature/currentGenre'
 
 
 
@@ -7,6 +8,7 @@ import { TMDBAPI } from '../services/Api';
 export const store = configureStore({
     reducer: {
         [TMDBAPI.reducerPath]: TMDBAPI.reducer,
+        currentGenre: genreReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(TMDBAPI.middleware),

@@ -1,15 +1,16 @@
 import React from 'react'
 import Star from '../Star'
-import { AiOutlineStar } from 'react-icons/ai'
 import { GoTriangleRight } from "react-icons/go";
 import { useParams } from 'react-router-dom';
 import { useGetMovieQuery } from '../../services/Api';
+import {CiLocationArrow1} from 'react-icons/ci';
 
 const MovieInformation = () => {
     const { id } = useParams();
     console.log(id);
 
-    const {data, isfetching, error} = useGetMovieQuery(id);
+    const { data, isfetching, error } = useGetMovieQuery(id);
+    console.log(data);
     return (
 
         <section className="w-full flex flex-col justify-center items-center max-w-[1700px] lg:flex-row lg:items-start">
@@ -22,66 +23,75 @@ const MovieInformation = () => {
                 <div className="w-[70%]">
                     <div className="text-center w-full">
                         <h1 className='font-black text-3xl'>{data?.title}</h1>
-                        <p className="text-sm mt-2">Every good thing in this world started with a dream.</p>
+                        <p className="text-sm mt-2">
+                            {data?.tagline}
+                        </p>
                     </div>
                     <div className="mt-3 w-full flex flex-col justify-center items-center lg:justify-between lg:flex-row">
                         <Star />
                         <p className="mt-3">
-                            117min/ 2023-12-06 / English
+                            {data?.runtime}  min / {data?.release_date} / {data?.original_language}
                         </p>
                     </div>
                     <div className="mt-3 w-full">
                         <h1 className="font-bold mb-3">Genre:</h1>
                         <div className="flex gap-4">
                             <button className='px-4 py-2  flex justify-center items-center gap-2 rounded-lg bg-light-blue'>
+                                {data?.genres.map((genre, index) => (
+                                    <p
+                                        key={index}
+                                        className="mb-4 mr-4 flex items-center justify-center rounded-lg bg-[#227fb4] px-3 py-2 text-sm"
+                                    >
+                                        <span className="mr-2 uppercase">{genre?.name}</span>
+                                        <CiLocationArrow1 className="text-sm" />
+                                    </p>
+                                ))}
+                                {/*<p className='uppercase'> genre2 </p>
+                                <AiOutlineStar />*/}
+                            </button>
+                            {/*<button className='px-4 py-2  flex justify-center items-center gap-2 rounded-lg bg-light-blue'>
                                 <p className='uppercase'> genre2 </p>
                                 <AiOutlineStar />
-                            </button>
-                            <button className='px-4 py-2  flex justify-center items-center gap-2 rounded-lg bg-light-blue'>
-                                <p className='uppercase'> genre2 </p>
-                                <AiOutlineStar />
-                            </button>
+                                </button>*/}
                         </div>
                     </div>
                     <div className="mt-3">
                         <h1 className="font-bold">Information:</h1>
                         <p className="">
-                            Willy Wonka chock-full of ideas and determined to change the world one delectable bite at a time- is proof that the best thing in life begin with a dream, and if you're lucky enough to meet Willy Wonka, anything is possible.
+                            {data?.overview}
                         </p>
                     </div>
                     <div className="mt-5 w-full">
                         <h1 className="font-bold mb-3">Top Cast:</h1>
                         <div className="flex flex-wrap justify-center items-center gap-2">
-                            <div className="flex flex-col  justify-center items-center">
-                                <div className="w-[100px] rounded-lg overflow-hidden">
-                                    <img src="https://learn.zoner.com/wp-content/uploads/2015/06/040mm.jpg?fidl=2019-06-mag-en&utm_source=learn.zoner.com&utm_medium=referral&utm_campaign=why-should-i-zoom-in-for-portraits&utm_content=text" alt="cast image" />
-                                </div>
-                                <p className="overflow-hidden over-flow-ellipsis whitespace-nowrap">Cast Name</p>
-                            </div>
+                            {data?.credits?.cast
+                                .map((character, index) => (
+                                    <div
+                                        key={index}
+                                        className="mt-2 flex w-[100px] flex-col items-center justify-start"
+                                    >
+                                        <img
+                                            className="w-full rounded-2xl"
+                                            src={`https://image.tmdb.org/t/p/w500/${character?.profile_path}`}
+                                            alt={character?.name}
+                                        />
+                                        <p className="mt-2 w-full overflow-hidden overflow-ellipsis whitespace-nowrap text-center text-sm">
+                                            {character?.name}
+                                        </p>
+                                    </div>
+                                ))
+                                .slice(0, 8)}
 
-                            <div className="flex flex-col  justify-center items-center">
-                                <div className="w-[100px] rounded-lg overflow-hidden">
-                                    <img src="https://learn.zoner.com/wp-content/uploads/2015/06/040mm.jpg?fidl=2019-06-mag-en&utm_source=learn.zoner.com&utm_medium=referral&utm_campaign=why-should-i-zoom-in-for-portraits&utm_content=text" alt="cast image" />
-                                </div>
-                                <p className="overflow-hidden over-flow-ellipsis whitespace-nowrap">Cast Name</p>
-                            </div>
-
-                            <div className="flex flex-col  justify-center items-center">
-                                <div className="w-[100px] rounded-lg overflow-hidden">
-                                    <img src="https://learn.zoner.com/wp-content/uploads/2015/06/040mm.jpg?fidl=2019-06-mag-en&utm_source=learn.zoner.com&utm_medium=referral&utm_campaign=why-should-i-zoom-in-for-portraits&utm_content=text" alt="cast image" />
-                                </div>
-                                <p className="overflow-hidden over-flow-ellipsis whitespace-nowrap">Cast Name</p>
-                            </div>
                         </div>
-
-
                     </div>
                     <div className=" w-full mt-3 flex justify-start items-center">
-                        <button className="px-3 py-3 border rounded-lg mr-4 flex justify-center items-center">
-                            <span>
-                                Website
-                            </span>
-                            <GoTriangleRight />
+                        <button className="px-3 py-3 border rounded-lg mr-4 flex justify-center items-center gap-2">
+                            <a href={data?.homepage} target='_blank'>
+                                <span>
+                                    Website
+                                </span>
+                                <GoTriangleRight />
+                            </a>
                         </button>
                         <button className="px-3 py-3 border rounded-lg flex justify-center items-center">
                             <span>

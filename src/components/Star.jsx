@@ -1,33 +1,28 @@
-import React from 'react'
-import { FaStar, FaStarHalfAlt } from "react-icons/fa"
-import { AiOutlineStar } from 'react-icons/ai'
-const star = () => {
+import React from "react";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { AiOutlineStar } from "react-icons/ai";
 
-    const rating = 8.6;
-    const starRating = rating / 2;
+const Stars = ({ starVote }) => {
+  const stars = starVote / 2;
+  const ratingStar = Array.from({ length: 5 }, (element, index) => {
+    let number = index + 0.5;
 
-    const starPrinting = Array.from({ length: 5 }, (ele, index) => {
-        let n = index + 0.5;
-        return (
-
-            <span key={index} className='text-yellow-500'>
-                {
-                    (starRating >= index + 1) ? (
-                        <FaStar />
-                    ) : (starRating >= n) ? (
-                        <FaStarHalfAlt />
-                    ) : (
-                        <AiOutlineStar />
-                    )
-                }
-            </span>
-        )
-    })
     return (
-        <div className='flex justify-center items-center gap-1'>
-            {starPrinting}
-        </div>
-    )
-}
+      <span key={index}>
+        {stars >= index + 1 ? (
+          <FaStar className="text-base text-yellow-500" />
+        ) : stars >= number ? (
+          <FaStarHalfAlt className="text-base text-yellow-500" />
+        ) : (
+          <AiOutlineStar className="text-base text-yellow-500" />
+        )}
+      </span>
+    );
+  });
 
-export default star
+  return (
+    <div className="mt-2 flex items-center justify-center">{ratingStar}</div>
+  );
+};
+
+export default Stars;
